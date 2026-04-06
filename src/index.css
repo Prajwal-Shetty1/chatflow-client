@@ -9,3 +9,67 @@
 ::-webkit-scrollbar{
   display: none;
 }
+.app-container {
+  height: 100vh;
+  width: 100%;
+  background-image: url("/src/assets/bgImage.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.home {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+/* Left Sidebar */
+/* Sidebar */
+.sidebar {
+  width: 25%;
+  height: 100vh;
+  padding: 20px;
+  position: relative;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.top img:first-child {
+  height: 40px;
+}
+
+.top img:last-child {
+  height: 25px;
+  cursor: pointer;
+}
+
+/* Dropdown menu */
+.menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+}
+
+.menu p {
+  padding: 8px 0;
+  cursor: pointer;
+  color: azure;
+}
+
+.menu hr {
+  margin: 5px 0;
+}
+
+/* Middle Chat */
+.chat-container {
+  width: 50%;
+  color: white;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+  width: 25%;
+  color: white;
+}
+
