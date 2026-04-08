@@ -22,7 +22,10 @@ const SideBar = () => {
                     <p>Logout</p>
                 </div>
             )}
-
+            <div className='serach'>
+                <img src={assets.search_icon} alt="" />
+                <input type="text" placeholder='SearchUser...' />
+            </div>
         </div>
     )
 }
