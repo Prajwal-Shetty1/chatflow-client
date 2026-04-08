@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import assets from '../assets/assets';
 import { useNavigate } from "react-router-dom";
-
+import { userDummyData } from "../assets/assets";
 const SideBar = () => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
@@ -25,6 +25,22 @@ const SideBar = () => {
             <div className='serach'>
                 <img src={assets.search_icon} alt="" />
                 <input type="text" placeholder='SearchUser...' />
+            </div>
+            <div className="user-list">
+                {userDummyData.map((user) => (
+                    <div key={user.id} className="user-item">
+
+                        <img src={user.profilePic} alt="" />
+
+                        <div className="user-info">
+                            <p>{user.fullName}</p>
+                            <span className={user.online ? "online" : "offline"}>
+                                {user.online ? "Online" : "Offline"}
+                            </span>
+                        </div>
+
+                    </div>
+                ))}
             </div>
         </div>
     )
