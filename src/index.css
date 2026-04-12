@@ -208,3 +208,117 @@
 .user-item.active {
   background: rgba(139, 92, 246, 0.2);
 }
+/* container */
+.chat-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+/* header */
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* user section */
+.chat-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chat-user p {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* actions */
+.chat-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.chat-actions img {
+  width: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.chat-actions img:hover {
+  opacity: 1;
+}
+
+.chat-container {
+  width: 75%;  /* when no right sidebar */
+}
+
+.home:has(.right-sidebar) .chat-container {
+  width: 50%;
+}
+/* container (takes full chat area) */
+.empty-chat {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  gap: 12px;
+}
+
+/* logo */
+.empty-chat img {
+  width: 90px;
+  opacity: 0.9;
+}
+
+/* heading */
+.empty-chat h2 {
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* main text */
+.empty-chat p {
+  color: white;
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+/* sub text */
+.empty-chat span {
+  color: gray;
+  font-size: 13px;
+}
+
+/* smooth appearance */
+.empty-chat {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

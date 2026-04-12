@@ -28,15 +28,13 @@ const SideBar = () => {
             </div>
             <div className="user-list">
                 {userDummyData.map((user) => (
-                    <div key={user.id} className="user-item">
+                    <div key={user._id} className="user-item">
 
                         <img src={user.profilePic} alt="" />
 
                         <div className="user-info">
                             <p>{user.fullName}</p>
-                            <span className={user.online ? "online" : "offline"}>
-                                {user.online ? "Online" : "Offline"}
-                            </span>
+                            <span className="offline">Offline</span>
                         </div>
 
                     </div>
