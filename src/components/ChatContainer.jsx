@@ -1,8 +1,11 @@
 import React from 'react'
 import assets from '../assets/assets';
+import { messagesDummyData } from "../assets/assets";
 
 const ChatContainer = ({ selectedUser, setSelectedUser }) => {
+    const currentUserId = "680f5116f10f3cd28382ed02";
 
+    /* 🔹 Empty state */
     if (!selectedUser) {
         return (
             <div className="empty-chat">
@@ -14,7 +17,13 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
         );
     }
 
-    /* 👇 WHEN USER IS SELECTED */
+    /* 🔹 Filter messages */
+    const filteredMessages = messagesDummyData.filter(
+        (msg) =>
+            (msg.senderId === currentUserId && msg.receiverId === selectedUser._id) ||
+            (msg.senderId === selectedUser._id && msg.receiverId === currentUserId)
+    );
+
     return (
         <div className="chat-container">
 
@@ -22,7 +31,10 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
             <div className="chat-header">
                 <div className="chat-user">
                     <img src={selectedUser.profilePic} alt="" />
-                    <p>{selectedUser.fullName}</p>
+                    <p>
+                        {selectedUser.fullName}
+                        <span className="online-dot"></span>
+                    </p>
                 </div>
 
                 <div className="chat-actions">
@@ -30,7 +42,29 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
                     <img src={assets.help_icon} alt="" />
                 </div>
             </div>
+
+            {/* MESSAGES */}
+            <div className="chat-messages">
+                {filteredMessages.map((msg) => (
+                    <div
+                        key={msg._id}
+                        className={`message ${msg.senderId === currentUserId ? "right" : "left"
+                            }`}
+                    >
+                        {msg.text && <p>{msg.text}</p>}
+                        {msg.image && <img src={msg.image} alt="" />}
+                    </div>
+                ))}
+            </div>
+
+            {/* INPUT */}
+            <div className="chat-input">
+                <input type="text" placeholder="Type a message..." />
+                <img src={assets.send_button} alt="" />
+            </div>
+
         </div>
     );
 };
+
 export default ChatContainer;

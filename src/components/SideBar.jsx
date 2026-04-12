@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import assets from '../assets/assets';
 import { useNavigate } from "react-router-dom";
 import { userDummyData } from "../assets/assets";
-const SideBar = () => {
+const SideBar = ({ selectedUser, setSelectedUser }) => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
 
@@ -28,7 +28,9 @@ const SideBar = () => {
             </div>
             <div className="user-list">
                 {userDummyData.map((user) => (
-                    <div key={user._id} className="user-item">
+
+                    <div key={user._id}className={`user-item ${selectedUser?._id === user._id ? "active" : ""}`}
+                    onClick={() => setSelectedUser(user)}> 
 
                         <img src={user.profilePic} alt="" />
 

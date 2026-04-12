@@ -7,8 +7,8 @@ const HomePage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   return (
-    <div className="home">
-      <SideBar setSelectedUser={setSelectedUser} />
+    <div className={`home ${selectedUser ? "active" : ""}`}>
+      <SideBar selectedUser={selectedUser}  setSelectedUser={setSelectedUser} />
       
       <ChatContainer selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
       {selectedUser && (
