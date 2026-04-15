@@ -46,14 +46,23 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
             {/* MESSAGES */}
             <div className="chat-messages">
                 {filteredMessages.map((msg) => (
-                    <div
-                        key={msg._id}
-                        className={`message ${msg.senderId === currentUserId ? "right" : "left"
-                            }`}
-                    >
-                        {msg.text && <p>{msg.text}</p>}
-                        {msg.image && <img src={msg.image} alt="" />}
+
+                    <div className={`message-row ${msg.senderId === currentUserId ? "right" : "left"}`}>
+                        {msg.senderId !== currentUserId && (
+                            <img className="msg-avatar" src={selectedUser.profilePic} alt="" />
+                        )}
+
+                        <div>
+                            <div className="message-bubble">
+                                {msg.text && <p>{msg.text}</p>}
+                                {msg.image && <img src={msg.image} alt="" />}
+                            </div>
+                            <span className="msg-time">
+                                {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                        </div>
                     </div>
+
                 ))}
             </div>
 
@@ -63,8 +72,12 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
                 <img src={assets.send_button} alt="" />
             </div>
 
-        </div>
+        </div >
     );
 };
 
 export default ChatContainer;
+
+
+
+

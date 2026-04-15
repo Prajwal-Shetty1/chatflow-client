@@ -432,3 +432,92 @@
 .chat-input img:hover {
   transform: scale(1.08);
 }
+/* message area */
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* row */
+.message-row {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* left / right alignment */
+.message-row.left {
+  justify-content: flex-start;
+}
+
+.message-row.right {
+  justify-content: flex-end;
+}
+
+/* avatar */
+.msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+/* bubble wrapper */
+.message-row > div {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* message bubble */
+.message-bubble {
+  max-width: 220px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+
+  display: inline-block;
+  width: fit-content;
+}
+
+/* LEFT bubble (soft glass look) */
+.message-row.left .message-bubble {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* RIGHT bubble (purple gradient like your UI) */
+.message-row.right .message-bubble {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+/* time */
+.msg-time {
+  font-size: 10px;
+  margin-top: 4px;
+  opacity: 0.6;
+  align-self: flex-end; 
+  padding-right: 2px;
+}
+
+/* align time */
+.message-row.left .msg-time {
+  text-align: left;
+  margin-left: 5px;
+}
+
+.message-row.right .msg-time {
+  text-align: right;
+  margin-right: 5px;
+}
+
+/* image inside message */
+.message-bubble img {
+  max-width: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  display: block;
+}
