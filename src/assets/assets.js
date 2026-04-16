@@ -48,35 +48,35 @@ export const userDummyData = [
         "email": "test1@gmail.com",
         "fullName": "Alison Martin",
         "profilePic": profile_alison,
-        "bio": "Hi Everyone, I am Using QuickChat",
+        "bio": "Hi Everyone, I am Using ChatFlow",
     },
     {
         "_id": "680f50e4f10f3cd28382ecf9",
         "email": "test2@gmail.com",
         "fullName": "Martin Johnson",
         "profilePic": profile_martin,
-        "bio": "Hi Everyone, I am Using QuickChat",
+        "bio": "Hi Everyone, I am Using ChatFlow",
     },
     {
         "_id": "680f510af10f3cd28382ed01",
         "email": "test3@gmail.com",
         "fullName": "Enrique Martinez",
         "profilePic": profile_enrique,
-        "bio": "Hi Everyone, I am Using QuickChat",
+        "bio": "Hi Everyone, I am Using ChatFlow",
     },
     {
         "_id": "680f5137f10f3cd28382ed10",
         "email": "test4@gmail.com",
         "fullName": "Marco Jones",
         "profilePic": profile_marco,
-        "bio": "Hi Everyone, I am Using QuickChat",
+        "bio": "Hi Everyone, I am Using ChatFlow",
     },
     {
         "_id": "680f516cf10f3cd28382ed11",
         "email": "test5@gmail.com",
         "fullName": "Richard Smith",
         "profilePic": profile_richard,
-        "bio": "Hi Everyone, I am Using QuickChat",
+        "bio": "Hi Everyone, I am Using ChatFlow",
     }
 ]
 

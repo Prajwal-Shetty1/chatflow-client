@@ -1,9 +1,20 @@
 import React from 'react'
 import assets from '../assets/assets';
 import { messagesDummyData } from "../assets/assets";
+import { useRef } from "react";
 
-const ChatContainer = ({ selectedUser, setSelectedUser }) => {
+
+
+const ChatContainer = ({ selectedUser,setSelectedUser }) => {
     const currentUserId = "680f5116f10f3cd28382ed02";
+    const fileInputRef = useRef();
+
+    const handleImage = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const imageUrl = URL.createObjectURL(file);
+        //console.log(imageUrl); 
+    };
 
     /* 🔹 Empty state */
     if (!selectedUser) {
@@ -48,9 +59,7 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
                 {filteredMessages.map((msg) => (
 
                     <div className={`message-row ${msg.senderId === currentUserId ? "right" : "left"}`}>
-                        {msg.senderId !== currentUserId && (
-                            <img className="msg-avatar" src={selectedUser.profilePic} alt="" />
-                        )}
+                        <img className="msg-avatar" src={msg.senderId === currentUserId ? assets.avatar_icon   : selectedUser.profilePic } />
 
                         <div>
                             <div className="message-bubble">
@@ -66,12 +75,15 @@ const ChatContainer = ({ selectedUser, setSelectedUser }) => {
                 ))}
             </div>
 
-            {/* INPUT */}
             <div className="chat-input">
-                <input type="text" placeholder="Type a message..." />
+                <div className="input-wrapper">
+                    <input type="file" accept="image/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImage} />
+                    <img src={assets.gallery_icon} alt="" className="gallery-icon" onClick={() => fileInputRef.current.click()} />
+                    <input type="text" placeholder="Type a message..." />
+                </div>
+
                 <img src={assets.send_button} alt="" />
             </div>
-
         </div >
     );
 };
