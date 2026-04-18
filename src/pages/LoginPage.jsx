@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "./LoginPage.css";
+import assets from '../assets/assets';
 
 const LoginPage = () => {
   const [currentState, setCurrentState] = useState("SignUp")
@@ -32,13 +33,8 @@ const LoginPage = () => {
           <div className="left-glow" />
 
           {/* Brand */}
-          <div className="brand">
-            <div className="brand-icon">
-              <div className="brand-icon-dots">
-                <span /><span /><span />
-              </div>
-            </div>
-            <div className="brand-name">Chat<em>Flow</em></div>
+          <div className='brand'>
+            <img src={assets.logo} alt="logo" />
           </div>
 
           {/* Hero */}
