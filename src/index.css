@@ -472,6 +472,7 @@
   background: linear-gradient(135deg, #7c5cf6, #9d79f7);
   color: #fff;
   border-bottom-right-radius: 4px;
+  align-items: flex-end;
 }
 
 .message-bubble img {
