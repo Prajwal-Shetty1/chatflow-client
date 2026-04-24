@@ -14,7 +14,7 @@
 .app-container {
   height: 100vh;
   width: 100%;
-  background-image: url("/src/assets/bgImage.svg");
+  background-image: url("/src/assets/bgImage.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
