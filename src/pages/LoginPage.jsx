@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import "./LoginPage.css";
 import assets from '../assets/assets';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [currentState, setCurrentState] = useState("SignUp")
@@ -9,15 +11,24 @@ const LoginPage = () => {
   const [password, setPassword] = useState("")
   const [bio, setBio] = useState("")
   const [isDataSubmitted, setIsDataSubmitted] = useState(false)
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (currentState === 'SignUp' && !isDataSubmitted) {
-      setIsDataSubmitted(true)
-    } else {
-      console.log({ fullName, email, password, bio })
+  const {login} = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (currentState === 'SignUp' && !isDataSubmitted) {
+    setIsDataSubmitted(true);
+  } else {
+    const success = await login(
+      currentState === "SignUp" ? "register" : "login",
+      { fullName, email, password, bio }
+    );
+    if (success) {
+      navigate("/");
     }
   }
+};
 
   return (
     <div className="page">

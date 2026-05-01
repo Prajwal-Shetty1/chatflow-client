@@ -3,7 +3,6 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {io} from "socket.io-client";
-
 // backend url
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.baseURL = backendUrl;
