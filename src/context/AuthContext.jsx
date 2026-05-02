@@ -39,9 +39,10 @@ const connectSocket =(userData) => {
   if(!userData || socket?.connected) return;
   const newSocket = io(backendUrl, {
     query : {
-      userId : userData.id,
+       userId: userData.id || userData._id || userData.user_id || userData.userId,
     }
   });
+  console.log("Sending to socket:", userData);
    newSocket.on("connect", () => {
     setSocket(newSocket);
     console.log("Connected:", newSocket.id);
@@ -64,11 +65,13 @@ const login =async (state,credentials) => {
     if (data.success) {
         setAuthUser(data.user);
         connectSocket(data.user);
-        axios.defaults.headers.common["token"] = data.token;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         localStorage.setItem("token",data.token);
         toast.success(data.message);
+        return true;
       }else{
         toast.error(data.message);
+         return false;
       }
 
   } catch (error) {
@@ -88,28 +91,38 @@ const logout = async () => {
 };
 
 //Update profile function to handle user profile updates
-const updateProfile = async (body) => {
+const updateProfile = async (formData) => {
   try {
-    const { data } = await axios.put("/api/users/update-profile", body);
+    const { data } = await axios.put(
+      "/api/users/update-profile",
+      formData,
+      {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
 
     if (data.success) {
       setAuthUser(data.user);
       toast.success("Profile Updated Successfully");
     } else {
-      toast.error(data.message); 
+      toast.error(data.message);
     }
+
   } catch (error) {
     toast.error(error.message);
   }
 };
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["token"] = token;
-    }
-  checkAuth();  
-  }, [])
-
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    checkAuth(); // ✅ only call if token exists
+  } else {
+    setLoading(false); // ✅ stop loading
+  }
+}, []);
 
   const value = {
     axios,

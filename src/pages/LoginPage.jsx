@@ -14,20 +14,23 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const {login} = useContext(AuthContext);
-
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
-  if (currentState === 'SignUp' && !isDataSubmitted) {
+
+  if (currentState === "SignUp" && !isDataSubmitted) {
     setIsDataSubmitted(true);
-  } else {
-    const success = await login(
-      currentState === "SignUp" ? "register" : "login",
-      { fullName, email, password, bio }
-    );
-    if (success) {
-      navigate("/");
-    }
+    return;
   }
+  const payload =
+    currentState === "SignUp"
+      ? { fullName, email, password, bio }
+      : { email, password }; // ✅ FIX for login
+  const success = await login(
+    currentState === "SignUp" ? "register" : "login",
+    payload
+  );
+
+  if (success) navigate("/");
 };
 
   return (

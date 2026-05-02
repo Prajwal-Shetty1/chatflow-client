@@ -1,18 +1,32 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import "./ProfilePage.css";
 import assets from '../assets/assets';
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../context/AuthContext';
 
 const ProfilePage = () => {
+
+  const { authUser, updateProfile } = useContext(AuthContext)
+
   const [selectedImg, setSelectedImg] = useState(null);
   const navigate = useNavigate();
-  const [name, setName] = useState("Martin Johnson");
-  const [bio, setBio] = useState("Hi Everyone, I am Using ChatFlow");
+  const [name, setName] = useState(authUser?.fullName || "");
+  const [bio, setBio] = useState(authUser?.bio || "");
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    navigate('/');
+  const onSubmitHandler = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("fullName", name);
+  formData.append("bio", bio);
+
+  if (selectedImg) {
+    formData.append("profilePic", selectedImg);
   }
+
+  await updateProfile(formData);
+  navigate('/');
+};
 
   return (
     <div className="profile-page">
@@ -26,7 +40,15 @@ const ProfilePage = () => {
             <label htmlFor="avatar" className="avatar-upload">
               <input
                 onChange={(e) => setSelectedImg(e.target.files[0])} type="file" id="avatar" accept=".png,.jpg,.jpeg" hidden />
-              <img src={selectedImg ? URL.createObjectURL(selectedImg) : assets.avatar_icon} alt="avatar" className="avatar-img" />
+              <img
+                src={
+                  selectedImg
+                    ? URL.createObjectURL(selectedImg)
+                    : authUser?.profilePic || assets.avatar_icon
+                }
+                alt="avatar"
+                className="avatar-img"
+              />
               <span>Upload Profile Image</span>
             </label>
 
@@ -48,5 +70,4 @@ const ProfilePage = () => {
     </div>
   )
 }
-
-export default ProfilePage;
+  export default ProfilePage;

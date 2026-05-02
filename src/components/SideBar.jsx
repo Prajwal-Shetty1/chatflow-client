@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import assets from '../assets/assets';
 import { useNavigate } from "react-router-dom";
 import { userDummyData } from "../assets/assets";
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 const SideBar = ({ selectedUser, setSelectedUser }) => {
+     
+    const {logout} = useContext(AuthContext);
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
 
@@ -19,7 +23,9 @@ const SideBar = ({ selectedUser, setSelectedUser }) => {
                 <div className='menu'>
                     <p onClick={() => navigate('/profile')}>Edit Profile</p>
                     <hr />
-                    <p>Logout</p>
+                    <p
+                     onClick={()=> logout()}
+                    >Logout</p>
                 </div>
             )}
             <div className='serach'>
