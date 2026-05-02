@@ -3,8 +3,6 @@ import assets from '../assets/assets';
 import { messagesDummyData } from "../assets/assets";
 import { useRef } from "react";
 
-
-
 const ChatContainer = ({ selectedUser,setSelectedUser }) => {
     const currentUserId = "680f5116f10f3cd28382ed02";
     const fileInputRef = useRef();

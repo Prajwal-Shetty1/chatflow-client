@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import assets from '../assets/assets';
 import { imagesDummyData } from "../assets/assets";
-
+import { AuthContext } from '../context/AuthContext';
 const RightSidebar = ({ selectedUser }) => {
+
+  const {logout} = useContext(AuthContext);
+  
   return selectedUser && (
     <div className='right-sidebar'>
 
@@ -28,7 +31,8 @@ const RightSidebar = ({ selectedUser }) => {
 
       {/* LOGOUT */}
       <div className="logout-section">
-        <button className="logout-btn">Logout</button>
+        <button className="logout-btn" onClick={()=> logout()}
+        >Logout</button>
       </div>
 
     </div>
