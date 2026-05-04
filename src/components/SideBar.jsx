@@ -1,14 +1,25 @@
 import React, { useState } from 'react'
 import assets from '../assets/assets';
 import { useNavigate } from "react-router-dom";
-import { userDummyData } from "../assets/assets";
+//import { userDummyData } from "../assets/assets";
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-const SideBar = ({ selectedUser, setSelectedUser }) => {
-     
-    const {logout} = useContext(AuthContext);
+import { ChatContext } from '../context/ChatContext';
+import { useEffect } from 'react';
+//const SideBar = ({ selectedUser, setSelectedUser }) => {
+const SideBar = () => {
+    const { getUsers, users, selectedUser, setSelectedUser,
+        unseenMessages, setUnseenMessages } = useContext(ChatContext);
+    const { logout, onlineUsers } = useContext(AuthContext);
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
+    const [input, setInput] = useState("");
+    const filteredUsers = input ? users.filter((user) => user.fullName.toLowerCase()
+        .includes(input.toLowerCase())) : users;
+
+    useEffect(() => {
+        getUsers();
+    }, [onlineUsers])
 
     return (
         <div className='sidebar'>
@@ -24,25 +35,31 @@ const SideBar = ({ selectedUser, setSelectedUser }) => {
                     <p onClick={() => navigate('/profile')}>Edit Profile</p>
                     <hr />
                     <p
-                     onClick={()=> logout()}
+                        onClick={() => logout()}
                     >Logout</p>
                 </div>
             )}
             <div className='serach'>
                 <img src={assets.search_icon} alt="" />
-                <input type="text" placeholder='SearchUser...' />
+                <input type="text"
+                    onChange={(e) => setInput(e.target.value)} placeholder='SearchUser...' />
             </div>
             <div className="user-list">
-                {userDummyData.map((user) => (
+                {filteredUsers.map((user) => (
 
-                    <div key={user._id}className={`user-item ${selectedUser?._id === user._id ? "active" : ""}`}
-                    onClick={() => setSelectedUser(user)}> 
+                    <div key={user._id} className={`user-item ${selectedUser?._id === user._id ? "active" : ""}`}
+                        onClick={() => setSelectedUser(user)}>
 
                         <img src={user.profilePic} alt="" />
 
                         <div className="user-info">
                             <p>{user.fullName}</p>
-                            <span className="offline">Offline</span>
+                            {onlineUsers.includes(user._id || user.id) ? (
+                                <span className="online">Online</span>
+                            ) : (
+                                <span className="offline">Offline</span>
+                            )}
+
                         </div>
 
                     </div>
