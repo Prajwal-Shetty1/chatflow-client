@@ -54,7 +54,7 @@ const SideBar = () => {
 
                         <div className="user-info">
                             <p>{user.fullName}</p>
-                            {onlineUsers.includes(user._id || user.id) ? (
+                            {onlineUsers.includes(String(user._id || user.id)) ? (
                                 <span className="online">Online</span>
                             ) : (
                                 <span className="offline">Offline</span>

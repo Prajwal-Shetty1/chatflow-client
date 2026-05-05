@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { createContext } from "react";
 import { AuthContext } from "./AuthContext";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export const ChatContext = createContext();
 
@@ -14,6 +15,20 @@ export const ChatProvider = ({ children }) => {
     const [unseenMessages, setUnseenMessages] = useState({});
 
     const { socket, axios } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleNewMessage = (newMessage) => {
+            setMessages((prev) => [...prev, newMessage]);
+        };
+
+        socket.on("newMessage", handleNewMessage);
+
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [socket]);
 
     //Function to get all users for sidebar
     //Fetch users list from backend and show in sidebar
@@ -57,7 +72,7 @@ export const ChatProvider = ({ children }) => {
             }
 
             const { data } = await axios.post(
-                `/api/messages/send/${selectedUser._id}`,
+                `/api/messages/send/${selectedUser.id || selectedUser._id}`,
                 formData
             );
 
