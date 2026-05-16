@@ -127,7 +127,15 @@ const ChatContainer = () => {
                         <div>
                             <div className="message-bubble">
                                 {msg.text && <p>{msg.text}</p>}
-                                {msg.image && <img src={msg.image} alt="" />}
+                                {msg.image && (
+                                    msg.image.includes("/video/") ? (
+                                        <video controls width="220">
+                                            <source src={msg.image} type="video/mp4" />
+                                        </video>
+                                    ) : (
+                                        <img src={msg.image} alt="" />
+                                    )
+                                )}
                             </div>
                             <span className="msg-time">
                                 {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -138,14 +146,20 @@ const ChatContainer = () => {
             </div>
             {selectedImage && (
                 <div className="image-preview">
-                    <img src={URL.createObjectURL(selectedImage)} alt="preview" />
+                    {selectedImage.type.startsWith("video") ? (
+                        <video width="220" controls>
+                            <source src={URL.createObjectURL(selectedImage)} />
+                        </video>
+                    ) : (
+                        <img src={URL.createObjectURL(selectedImage)} alt="preview" />
+                    )}
                     <button onClick={() => setSelectedImage(null)}>✕</button>
                 </div>
             )}
 
             <div className="chat-input">
                 <div className="input-wrapper">
-                    <input type="file" accept="image/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImage} />
+                    <input type="file" accept="image/*,video/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImage} />
                     <img src={assets.gallery_icon} alt="" className="gallery-icon" onClick={() => fileInputRef.current.click()} />
                     <input type="text"
                         onChange={(e) => setInput(e.target.value)} value={input}
