@@ -2,11 +2,17 @@ import React, { useContext } from 'react';
 import assets from '../assets/assets';
 import { imagesDummyData } from "../assets/assets";
 import { AuthContext } from '../context/AuthContext';
-const RightSidebar = ({ selectedUser }) => {
+import { ChatContext } from '../context/ChatContext';
+const RightSidebar = () => {
 
   const {logout} = useContext(AuthContext);
+
+  const {selectedUser} = useContext(ChatContext);
+
+
+  if (!selectedUser) return null;
   
-  return selectedUser && (
+  return  (
     <div className='right-sidebar'>
 
       {/* PROFILE */}

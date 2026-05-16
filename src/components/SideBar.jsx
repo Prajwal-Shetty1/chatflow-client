@@ -47,7 +47,7 @@ const SideBar = () => {
             <div className="user-list">
                 {filteredUsers.map((user) => (
 
-                    <div key={user._id} className={`user-item ${selectedUser?._id === user._id ? "active" : ""}`}
+                    <div key={user.id} className={`user-item ${selectedUser?._id === user.id ? "active" : ""}`}
                         onClick={() => setSelectedUser(user)}>
 
                         <img src={user.profilePic} alt="" />
