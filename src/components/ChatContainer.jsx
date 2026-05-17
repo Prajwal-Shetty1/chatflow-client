@@ -108,8 +108,9 @@ const ChatContainer = () => {
                 </div>
 
                 <div className="chat-actions">
-                    <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
-                    <img src={assets.help_icon} alt="" />
+                    <img src={assets.call} alt="" />
+                    <img src={assets.video} alt="" />
+                     <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
                 </div>
             </div>
 
