@@ -14,6 +14,7 @@ const VideoCall = ({
     const peerRef = useRef(null);
     const localStreamRef = useRef(null);
     const timerRef = useRef(null);
+    
     const callType = callInfo?.callType || outgoingCall?.callType || "video";
     const isVideoCall = callType === "video";
 
@@ -21,7 +22,6 @@ const VideoCall = ({
     const remoteUser = outgoingCall
         ? { fullName: outgoingCall.fullName, profilePic: outgoingCall.profilePic }
         : callInfo?.from;
-    const isVideoCall = callType === "video";
 
     /* ── Start timer once connected */
     useEffect(() => {

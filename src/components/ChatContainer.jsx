@@ -5,6 +5,8 @@ import { useRef } from "react";
 import { useEffect, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from '../context/ChatContext';
+import CallModal from '../components/CallModal';
+import VideoCall from '../components/VideoCall';
 
 //const ChatContainer = ({ selectedUser, setSelectedUser }) => {
 const ChatContainer = () => {
@@ -15,7 +17,9 @@ const ChatContainer = () => {
         setSelectedUser,
         getMessages,
         sendMessage } = useContext(ChatContext);
-
+    //Call State
+    const [incomingCall, setIncomingCall] = useState(null); //{from,signal,callType}
+    const [activeCall, setActiveCall] = useState(null);//{outgoing or incoming}
 
     const currentUserId = authUser?.id;
     const fileInputRef = useRef();
@@ -63,7 +67,43 @@ const ChatContainer = () => {
 
     }, [socket, selectedUser]);
 
+    //Incoming Call Listener--------------
+    useEffect(() => {
+        if (!socket) return;
+        socket.on("incoming-call", (data) => {
+            setIncomingCall(data);   // { from: { id, fullName, profilePic }, signal, callType }
 
+        });
+        return () => socket.off("incoming-call");
+    }, [socket])
+
+    // ── Call handlers ─────────────────────────────────────
+    const startCall = (callType) => {
+        if (!selectedUser) return;
+        setActiveCall({
+            outgoing: {
+                to: selectedUser.id,
+                fullName: selectedUser.fullName,
+                profilePic: selectedUser.profilePic,
+                callType,
+            }
+        });
+    };
+    const acceptCall = () => {
+        setActiveCall({ incoming: incomingCall });
+        setIncomingCall(null);
+    };
+
+    const rejectcall = () => {
+        socket.emit("call-rejected", { to: incomingCall.from.id });
+        setIncomingCall(null);
+    };
+
+    const endcall = () => {
+        setActiveCall(null);
+    }
+
+    // ── Image handler ───────────
     const handleImage = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -79,7 +119,7 @@ const ChatContainer = () => {
         setSelectedImage(null);
     };
 
-    /* 🔹 Empty state */
+    /*Empty state */
     if (!selectedUser) {
         return (
             <div className="empty-chat">
@@ -91,7 +131,7 @@ const ChatContainer = () => {
         );
     }
 
-    /* 🔹 Filter messages */
+    /*Filter messages */
     const filteredMessages = messages;
 
     return (
@@ -103,14 +143,16 @@ const ChatContainer = () => {
                     <img src={selectedUser.profilePic} alt="" />
                     <p>
                         {selectedUser.fullName}
-                        <span className="online-dot"></span>
+                        {onlineUsers.includes(selectedUser.id) && (
+                            <span className="online-dot"></span>
+                        )}
                     </p>
                 </div>
 
                 <div className="chat-actions">
-                    <img src={assets.call} alt="" />
-                    <img src={assets.video} alt="" />
-                     <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
+                    <img src={assets.call} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("audio")} />
+                    <img src={assets.video} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("video")} />
+                    <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
                 </div>
             </div>
 
@@ -176,6 +218,22 @@ const ChatContainer = () => {
                 <img
                     onClick={handleSendMessage} src={assets.send_button} alt="" />
             </div>
+            {/*_____INCOMING CALL POPUP________*/}
+            <CallModal
+                incomingCall={incomingCall}
+                onAccept={acceptCall}
+                onReject={rejectcall}
+            />
+            {/* ── ACTIVE CALL SCREEN ───*/}
+            {activeCall && (
+                <VideoCall
+                    socket={socket}
+                    currentUser={authUser}
+                    outgoingCall={activeCall.outgoing || null}
+                    callInfo={activeCall.incoming || null}
+                    onEndCall={endcall}
+                />
+            )}
         </div >
     );
 };

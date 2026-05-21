@@ -1,0 +1,183 @@
+/* ── Full-screen container ───*/
+.vc-container {
+    position: fixed;
+    inset: 0;
+    background: #0d0d1a;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+}
+
+/* ── Remote video (fills screen) ──── */
+.vc-remote {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #111;
+}
+
+/* ── Local PIP video ─── */
+.vc-local {
+    position: absolute;
+    bottom: 110px;
+    right: 24px;
+    width: 160px;
+    height: 115px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    background: #1a1a2e;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    z-index: 10;
+}
+
+/* ── Top bar (name + timer) ────*/
+.vc-topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 28px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent);
+    z-index: 10;
+}
+
+.vc-topbar-name {
+    color: #f0f0ff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 3px;
+}
+
+.vc-topbar-status {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 13px;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* ── Controls bar ─── */
+.vc-controls {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    background: rgba(13, 13, 26, 0.75);
+    backdrop-filter: blur(14px);
+    padding: 14px 28px;
+    border-radius: 60px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    align-items: flex-end;
+    padding-bottom: 20px;
+}
+
+.vc-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 22px;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.2s, transform 0.15s;
+    justify-content: center;
+    position: relative;
+}
+
+.vc-btn span {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    position: absolute;
+    bottom: -18px;
+    white-space: nowrap;
+}
+
+
+
+.vc-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.vc-btn:active {
+    transform: scale(0.97);
+}
+
+/* Toggled state — red tint (muted / cam off) */
+.vc-btn.vc-btn-on {
+    background: rgba(239, 68, 68, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* End call */
+.vc-btn.vc-btn-end {
+    background: #ef4444;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+}
+
+.vc-btn.vc-btn-end:hover {
+    background: #dc2626;
+}
+
+/* ── Audio-only mode ── */
+.vc-audio-mode {
+    background: radial-gradient(ellipse at center, #1a1040 0%, #0d0d1a 70%);
+}
+
+.vc-audio-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 80px;
+    z-index: 10;
+}
+
+.vc-audio-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(139, 92, 246, 0.6);
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+}
+
+.vc-audio-letter {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    font-size: 44px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+}
+
+.vc-audio-name {
+    color: #f0f0ff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.vc-audio-status {
+    color: #9090b0;
+    font-size: 15px;
+    margin: 0;
+}
