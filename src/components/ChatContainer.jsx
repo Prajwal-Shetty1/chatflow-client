@@ -135,97 +135,99 @@ const ChatContainer = () => {
     const filteredMessages = messages;
 
     return (
-        <div className="chat-container">
+        <>
+            <div className="chat-container">
 
-            {/* HEADER */}
-            <div className="chat-header">
-                <div className="chat-user">
-                    <img src={selectedUser.profilePic} alt="" />
-                    <p>
-                        {selectedUser.fullName}
-                        {onlineUsers.includes(selectedUser.id) && (
+                {/* HEADER */}
+                <div className="chat-header">
+                    <div className="chat-user">
+                        <img src={selectedUser.profilePic} alt="" />
+                        <p>
+                            {selectedUser.fullName}
                             <span className="online-dot"></span>
-                        )}
-                    </p>
-                </div>
-
-                <div className="chat-actions">
-                    <img src={assets.call} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("audio")} />
-                    <img src={assets.video} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("video")} />
-                    <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
-                </div>
-            </div>
-
-            {/* MESSAGES */}
-            <div className="chat-messages">
-                {filteredMessages.map((msg) => (
-
-                    <div key={msg.id} className={`message-row ${msg.senderId === currentUserId ? "right" : "left"}`}>
-                        <img className="msg-avatar"
-                            src={msg.senderId === currentUserId ? authUser.profilePic : selectedUser.profilePic}
-                            onError={(e) => e.target.src = assets.avatar_icon}
-                            alt="avatar"
-                        />
-
-                        <div>
-                            <div className="message-bubble">
-                                {msg.text && <p>{msg.text}</p>}
-                                {msg.image && (
-                                    msg.image.includes("/video/") ? (
-                                        <video controls width="220">
-                                            <source src={msg.image} type="video/mp4" />
-                                        </video>
-                                    ) : (
-                                        <img src={msg.image} alt="" />
-                                    )
-                                )}
-                            </div>
-                            <span className="msg-time">
-                                {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                            </span>
-                        </div>
+                        </p>
                     </div>
-                ))}
-            </div>
-            {selectedImage && (
-                <div className="image-preview">
-                    {selectedImage.type.startsWith("video") ? (
-                        <video width="220" controls>
-                            <source src={URL.createObjectURL(selectedImage)} />
-                        </video>
-                    ) : (
-                        <img src={URL.createObjectURL(selectedImage)} alt="preview" />
-                    )}
-                    <button onClick={() => setSelectedImage(null)}>✕</button>
-                </div>
-            )}
 
-            <div className="chat-input">
-                <div className="input-wrapper">
-                    <input type="file" accept="image/*,video/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImage} />
-                    <img src={assets.gallery_icon} alt="" className="gallery-icon" onClick={() => fileInputRef.current.click()} />
-                    <input type="text"
-                        onChange={(e) => setInput(e.target.value)} value={input}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                handleSendMessage(e);
-                            }
-                        }}
-                        placeholder="Type a message..." />
+                    <div className="chat-actions">
+                        <img src={assets.call} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("audio")} />
+                        <img src={assets.video} alt="" style={{ cursor: "pointer" }} onClick={() => startCall("video")} />
+                        <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" />
+                    </div>
                 </div>
 
-                <img
-                    onClick={handleSendMessage} src={assets.send_button} alt="" />
+                {/* MESSAGES */}
+                <div className="chat-messages">
+                    {filteredMessages.map((msg) => (
+
+                        <div key={msg.id} className={`message-row ${msg.senderId === currentUserId ? "right" : "left"}`}>
+                            <img className="msg-avatar"
+                                src={msg.senderId === currentUserId ? authUser.profilePic : selectedUser.profilePic}
+                                onError={(e) => e.target.src = assets.avatar_icon}
+                                alt="avatar"
+                            />
+
+                            <div className="message-group">
+                                <div className="message-bubble">
+                                    {msg.text && <p>{msg.text}</p>}
+                                    {msg.image && (
+                                        msg.image.includes("/video/") ? (
+                                            <video controls width="220">
+                                                <source src={msg.image} type="video/mp4" />
+                                            </video>
+                                        ) : (
+                                            <img src={msg.image} alt="" />
+                                        )
+                                    )}
+                                </div>
+                                <span className="msg-time">
+                                    {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                {selectedImage && (
+                    <div className="image-preview">
+                        {selectedImage.type.startsWith("video") ? (
+                            <video width="220" controls>
+                                <source src={URL.createObjectURL(selectedImage)} />
+                            </video>
+                        ) : (
+                            <img src={URL.createObjectURL(selectedImage)} alt="preview" />
+                        )}
+                        <button onClick={() => setSelectedImage(null)}>✕</button>
+                    </div>
+                )}
+
+                <div className="chat-input">
+                    <div className="input-wrapper">
+                        <input type="file" accept="image/*,video/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleImage} />
+                        <img src={assets.gallery_icon} alt="" className="gallery-icon" onClick={() => fileInputRef.current.click()} />
+                        <input type="text"
+                            onChange={(e) => setInput(e.target.value)} value={input}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSendMessage(e);
+                                }
+                            }}
+                            placeholder="Type a message..." />
+                    </div>
+
+                    <img
+                        onClick={handleSendMessage} src={assets.send_button} alt="" />
+                </div>
+                {/*_____INCOMING CALL POPUP________*/}
+                <CallModal
+                    incomingCall={incomingCall}
+                    onAccept={acceptCall}
+                    onReject={rejectcall}
+                />
             </div>
-            {/*_____INCOMING CALL POPUP________*/}
-            <CallModal
-                incomingCall={incomingCall}
-                onAccept={acceptCall}
-                onReject={rejectcall}
-            />
+
             {/* ── ACTIVE CALL SCREEN ───*/}
             {activeCall && (
+
                 <VideoCall
                     socket={socket}
                     currentUser={authUser}
@@ -233,11 +235,12 @@ const ChatContainer = () => {
                     callInfo={activeCall.incoming || null}
                     onEndCall={endcall}
                 />
-            )}
-        </div >
-    );
-};
 
+            )}
+        </>
+    );
+
+};
 export default ChatContainer;
 
 

@@ -1,3 +1,4 @@
+import SimplePeer from "simple-peer/simplepeer.min.js";
 import React, { useState, useRef, useEffect } from "react";
 
 const VideoCall = ({
@@ -14,7 +15,7 @@ const VideoCall = ({
     const peerRef = useRef(null);
     const localStreamRef = useRef(null);
     const timerRef = useRef(null);
-    
+
     const callType = callInfo?.callType || outgoingCall?.callType || "video";
     const isVideoCall = callType === "video";
 
@@ -66,7 +67,7 @@ const VideoCall = ({
                 createPeer(stream, false, callInfo.signal); //receiver
             }
         } catch (error) {
-            console.log("getUserMedia error:", err);
+            console.log("getUserMedia error:", error);
             alert("Could not access camera/microphone.\nPlease allow permissions and try again."
             );
             onEndCall();
@@ -74,7 +75,7 @@ const VideoCall = ({
     }
     /* ── Create simple-peer instance ─── */
     const createPeer = (stream, initiator, incomingSignal = null) => {
-        const peer = new Peer({ initiator, trickle: false, stream });
+        const peer = new SimplePeer({ initiator, trickle: false, stream });
         peer.on("signal", (signal) => {
             if (initiator) {
                 // Caller → send offer to receiver
@@ -85,7 +86,8 @@ const VideoCall = ({
                     callType,
                 });
                 // Wait for answer
-                socket.once("call-accepted", ({ signal: answerSignal }) => {
+                socket.once("call-answered", ({ signal: answerSignal }) => {
+                    if (!peer || peer.destroyed) return;
                     peer.signal(answerSignal);
                     setCallAccepted(true);
                 });
@@ -96,7 +98,7 @@ const VideoCall = ({
                 });
             } else {
                 // Receiver → send answer to caller
-                socket.emit("call-accepted", {
+                socket.emit("answer-call", {
                     to: callInfo.from.id,
                     signal
                 });
@@ -116,7 +118,7 @@ const VideoCall = ({
             onEndCall();
         });
         // Receiver signals with caller's offer right away
-        if (!initiator && incomingSignal) {
+        if (!initiator && incomingSignal && peer) {
             peer.signal(incomingSignal);
         }
         peerRef.current = peer;
@@ -141,13 +143,13 @@ const VideoCall = ({
     /* ── Controls ──── */
     const toggleMute = () => {
         if (!localStreamRef.current) return;
-        localStreamRef.current.getAudiotracks().forEach((t) => (t.enabled = !t.enabled));
+        localStreamRef.current.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
         setIsMuted((p) => !p);
     };
 
     const toggleVideo = () => {
         if (!localStreamRef.current || !isVideoCall) return;
-        localStreamRef.current.getViddeotracks().forEach((t) => (t.enabled = !t.enabled));
+        localStreamRef.current.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
         setIsVideoOff((p) => !p);
     };
 

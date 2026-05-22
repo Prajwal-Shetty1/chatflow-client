@@ -1,14 +1,17 @@
 /* ── Full-screen container ───*/
 .vc-container {
-    position: fixed;
+    position: fixed;   
     inset: 0;
+    width: 100vw;         
+    height: 100vh;        
     background: #0d0d1a;
-    z-index: 9000;
+    z-index: 9999;      
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: inherit;
-}
+    overflow: hidden;  
+}  
 
 /* ── Remote video (fills screen) ──── */
 .vc-remote {
