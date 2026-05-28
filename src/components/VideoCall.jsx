@@ -1,5 +1,6 @@
 import SimplePeer from "simple-peer/simplepeer.min.js";
 import React, { useState, useRef, useEffect } from "react";
+import "./VideoCall.css";
 
 const VideoCall = ({
     socket, currentUser, outgoingCall, callInfo, onEndCall,
@@ -85,20 +86,20 @@ const VideoCall = ({
                     signal,
                     callType,
                 });
-                // Wait for answer
-                socket.once("call-answered", ({ signal: answerSignal }) => {
+                // Caller → wait for answer
+                socket.once("call-accepted", ({ signal: answerSignal }) => {
                     if (!peer || peer.destroyed) return;
                     peer.signal(answerSignal);
                     setCallAccepted(true);
                 });
                 socket.once("call-rejected", () => {
-                    alert(`${outgoingCall.fullName}declined the call. `);
+                    alert(`${outgoingCall.fullName} declined the call.`);
                     cleanup();
                     onEndCall();
                 });
             } else {
                 // Receiver → send answer to caller
-                socket.emit("answer-call", {
+                socket.emit("call-accepted", {
                     to: callInfo.from.id,
                     signal
                 });
@@ -110,20 +111,16 @@ const VideoCall = ({
                 remoteVideoRef.current.srcObject = remoteStream;
             }
         });
-        peer.on("error", (err) =>
-            console.log("Peer error:", err));
-
+        peer.on("error", (err) => console.log("Peer error:", err));
         peer.on("close", () => {
             cleanup();
             onEndCall();
         });
-        // Receiver signals with caller's offer right away
         if (!initiator && incomingSignal && peer) {
             peer.signal(incomingSignal);
         }
         peerRef.current = peer;
     }
-
     /* ── Cleanup ─── */
     const cleanup = () => {
         clearInterval(timerRef.current);
@@ -161,7 +158,7 @@ const VideoCall = ({
     };
 
     return (
-        <div className={`vc-container ${!isVideoCall ? "vc-audio-mode" : ""}`}>
+        <div className={`vc-container ${!isVideoCall ? "vc-audio-mode" : ""} ${callAccepted ? "vc-connected" : ""}`}>
 
             {isVideoCall ? (
                 <>
@@ -188,7 +185,7 @@ const VideoCall = ({
                         {remoteUser?.fullName || "User"}
                     </p>
 
-                    <p className="vc-audio-status">
+                    <p className={`vc-audio-status ${callAccepted ? "vc-status-connected" : "vc-status-calling"}`}>
                         {callAccepted
                             ? `🔊 ${formatTime(callDuration)}`
                             : "⏳ Calling..."}
