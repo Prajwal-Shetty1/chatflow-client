@@ -23,6 +23,9 @@ import img2 from './img2.jpg'
 import bgImg from './bgImg.png'
 import call from './call.png'
 import video from './video.png'
+import messages from './messages.png'
+import partners from './partners.png'
+import videoandaudio from './video-and-audio.png'
 
 const assets = {
     avatar_icon,
@@ -39,7 +42,10 @@ const assets = {
     profile_martin,
     bgImg,
     call,
-    video
+    video,
+    messages,
+    videoandaudio,
+    partners
 }
 
 export default assets;
