@@ -26,6 +26,7 @@ import video from './video.png'
 import messages from './messages.png'
 import partners from './partners.png'
 import videoandaudio from './video-and-audio.png'
+import chatflowpreview from './chatflow-preview.png'
 
 const assets = {
     avatar_icon,
@@ -45,7 +46,8 @@ const assets = {
     video,
     messages,
     videoandaudio,
-    partners
+    partners,
+    chatflowpreview
 }
 
 export default assets;
