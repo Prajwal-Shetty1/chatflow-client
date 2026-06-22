@@ -134,6 +134,29 @@ const ChatContainer = () => {
     /*Filter messages */
     const filteredMessages = messages;
 
+    /*for adding Date in message*/
+    const getDateLabel = (date) => {
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        const msgDate = new Date(date);
+
+        if (msgDate.toDateString() === today.toDateString()) {
+            return "Today";
+        }
+
+        if (msgDate.toDateString() === yesterday.toDateString()) {
+            return "Yesterday";
+        }
+
+        return msgDate.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+    };
+
     return (
         <>
             <div className="chat-container">
@@ -155,36 +178,73 @@ const ChatContainer = () => {
                     </div>
                 </div>
 
-                {/* MESSAGES */}
                 <div className="chat-messages">
-                    {filteredMessages.map((msg) => (
+                    {filteredMessages.map((msg, index) => {
 
-                        <div key={msg.id} className={`message-row ${msg.senderId === currentUserId ? "right" : "left"}`}>
-                            <img className="msg-avatar"
-                                src={msg.senderId === currentUserId ? authUser.profilePic : selectedUser.profilePic}
-                                onError={(e) => e.target.src = assets.avatar_icon}
-                                alt="avatar"
-                            />
+                        const currentDate = getDateLabel(msg.createdAt);
 
-                            <div className="message-group">
-                                <div className="message-bubble">
-                                    {msg.text && <p>{msg.text}</p>}
-                                    {msg.image && (
-                                        msg.image.includes("/video/") ? (
-                                            <video controls width="220">
-                                                <source src={msg.image} type="video/mp4" />
-                                            </video>
-                                        ) : (
-                                            <img src={msg.image} alt="" />
-                                        )
-                                    )}
+                        const previousDate =
+                            index > 0
+                                ? getDateLabel(filteredMessages[index - 1].createdAt)
+                                : null;
+
+                        const showDate = currentDate !== previousDate;
+
+                        return (
+                            <React.Fragment key={msg.id}>
+
+                                {showDate && (
+                                    <div className="date-divider">
+                                        {currentDate}
+                                    </div>
+                                )}
+
+                                <div
+                                    className={`message-row ${msg.senderId === currentUserId ? "right" : "left"
+                                        }`}
+                                >
+                                    <img
+                                        className="msg-avatar"
+                                        src={
+                                            msg.senderId === currentUserId
+                                                ? authUser.profilePic
+                                                : selectedUser.profilePic
+                                        }
+                                        onError={(e) =>
+                                            (e.target.src = assets.avatar_icon)
+                                        }
+                                        alt="avatar"
+                                    />
+
+                                    <div className="message-group">
+                                        <div className="message-bubble">
+                                            {msg.text && <p>{msg.text}</p>}
+
+                                            {msg.image &&
+                                                (msg.image.includes("/video/") ? (
+                                                    <video controls width="220">
+                                                        <source
+                                                            src={msg.image}
+                                                            type="video/mp4"
+                                                        />
+                                                    </video>
+                                                ) : (
+                                                    <img src={msg.image} alt="" />
+                                                ))}
+                                        </div>
+
+                                        <span className="msg-time">
+                                            {new Date(msg.createdAt).toLocaleTimeString([], {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="msg-time">
-                                    {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+
+                            </React.Fragment>
+                        );
+                    })}
                 </div>
                 {selectedImage && (
                     <div className="image-preview">
