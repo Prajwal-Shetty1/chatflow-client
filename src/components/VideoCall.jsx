@@ -1,6 +1,7 @@
 import SimplePeer from "simple-peer/simplepeer.min.js";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect , useContext } from "react";
 import "./VideoCall.css";
+import {ChatContext} from "../context/ChatContext";
 
 const VideoCall = ({
     socket, currentUser, outgoingCall, callInfo, onEndCall,
@@ -19,6 +20,8 @@ const VideoCall = ({
 
     const callType = callInfo?.callType || outgoingCall?.callType || "video";
     const isVideoCall = callType === "video";
+
+    const { saveCallLog } = useContext(ChatContext);
 
     // Remote user info for the UI
     const remoteUser = outgoingCall
@@ -150,12 +153,21 @@ const VideoCall = ({
         setIsVideoOff((p) => !p);
     };
 
-    const handleEndCall = () => {
-        const toId = outgoingCall?.to || callInfo?.from?.id;
-        if (toId) socket.emit("call-ended", { to: toId });
-        cleanup();
-        onEndCall();
-    };
+  const handleEndCall = async () => {
+    const toId = outgoingCall?.to || callInfo?.from?.id;
+
+    if (toId) {
+        await saveCallLog(
+            toId,
+            isVideoCall ? "video_call" : "audio_call"
+        );
+
+        socket.emit("call-ended", { to: toId });
+    }
+
+    cleanup();
+    onEndCall();
+};
 
     return (
         <div className={`vc-container ${!isVideoCall ? "vc-audio-mode" : ""} ${callAccepted ? "vc-connected" : ""}`}>

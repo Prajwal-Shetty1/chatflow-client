@@ -84,6 +84,22 @@ export const ChatProvider = ({ children }) => {
             toast.error(error.message);
         }
     };
+    //save a call as a chat message.
+    const saveCallLog = async (receiverId, messageType) => {
+        try {
+            const { data } = await axios.post(
+                `/api/messages/call-log/${receiverId}`,
+                { messageType }
+            );
+
+            if (data.success) {
+                setMessages((prev) => [...prev, data.message]);
+            }
+
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
 
 
     const value = {
@@ -95,7 +111,8 @@ export const ChatProvider = ({ children }) => {
         setSelectedUser,
         getUsers,
         getMessages,
-        sendMessage
+        sendMessage,
+        saveCallLog
 
     }
 

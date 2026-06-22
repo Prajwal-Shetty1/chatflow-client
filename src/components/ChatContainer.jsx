@@ -218,19 +218,33 @@ const ChatContainer = () => {
 
                                     <div className="message-group">
                                         <div className="message-bubble">
-                                            {msg.text && <p>{msg.text}</p>}
 
-                                            {msg.image &&
-                                                (msg.image.includes("/video/") ? (
-                                                    <video controls width="220">
-                                                        <source
-                                                            src={msg.image}
-                                                            type="video/mp4"
-                                                        />
-                                                    </video>
-                                                ) : (
-                                                    <img src={msg.image} alt="" />
-                                                ))}
+                                            {msg.messageType === "audio_call" && (
+                                                <div className="call-message">
+                                                    📞 Audio Call
+                                                </div>
+                                            )}
+
+                                            {msg.messageType === "video_call" && (
+                                                <div className="call-message">
+                                                    📹 Video Call
+                                                </div>
+                                            )}
+
+                                            {msg.messageType === "text" && msg.text && (
+                                                <p>{msg.text}</p>
+                                            )}
+
+                                            {msg.messageType === "image" && (
+                                                <img src={msg.image} alt="" />
+                                            )}
+
+                                            {msg.messageType === "video" && (
+                                                <video controls width="220">
+                                                    <source src={msg.image} type="video/mp4" />
+                                                </video>
+                                            )}
+
                                         </div>
 
                                         <span className="msg-time">
